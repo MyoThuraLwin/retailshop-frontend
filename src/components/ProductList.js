@@ -84,17 +84,41 @@ const ProductList = ({ onLogout }) => {
     alert(`Edit functionality for product "${product.name}" would be implemented here.`);
   };
 
-  const handleLogout = () => {
-    const refreshToken = localStorage.getItem('refresh_token');
-    if (refreshToken) {
-      // Call logout API
-      productAPI.logout(refreshToken).catch(console.error);
+  const handleLogout = async () => {
+    // Show confirmation dialog
+    if (window.confirm('Are you sure you want to logout?')) {
+      try {
+        const refreshToken = localStorage.getItem('refresh_token');
+        
+        if (refreshToken) {
+          // Call logout API with refresh token
+          await productAPI.logout(refreshToken);
+        }
+        
+        // Clear tokens from localStorage
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        
+        // Show success message
+        setSuccessMessage('Logged out successfully!');
+        
+        // Clear message after 1 second and call parent logout handler
+        setTimeout(() => {
+          onLogout();
+        }, 1000);
+        
+      } catch (error) {
+        console.error('Logout error:', error);
+        setError('Failed to logout properly. Please try again.');
+        
+        // Even if API call fails, clear local tokens and logout
+        setTimeout(() => {
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+          onLogout();
+        }, 2000);
+      }
     }
-    // Clear tokens
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    // Call parent logout handler
-    onLogout();
   };
 
   if (isLoading) {
