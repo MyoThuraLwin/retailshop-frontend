@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { authAPI } from '../services/api';
 import './Register.css';
 
-const Register = () => {
+const Register = ({ onSwitchToLogin }) => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -312,6 +312,18 @@ const Register = () => {
             {isLoading ? 'Registering...' : 'Register'}
           </button>
         </form>
+        
+        <div className="auth-switch">
+          Already have an account?{' '}
+          <button 
+            type="button" 
+            className="link-button"
+            onClick={onSwitchToLogin}
+            disabled={isLoading}
+          >
+            Login here
+          </button>
+        </div>
       </div>
     </div>
   );
