@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { productAPI } from '../services/api';
 import './ProductList.css';
 
-const ProductList = ({ onLogout, onAddProduct }) => {
+const ProductList = ({ onLogout, onAddProduct, onEditProduct }) => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -78,9 +78,9 @@ const ProductList = ({ onLogout, onAddProduct }) => {
   };
 
   const handleEdit = (product) => {
-    // For now, we'll show an alert. In a real app, this would navigate to an edit page
-    alert(`Edit functionality for product "${product.name}" would be implemented here.`);
-  };
+  // Navigate to edit product page
+  onEditProduct(product.id);
+};
 
   const handleLogout = async () => {
     // Show confirmation dialog
