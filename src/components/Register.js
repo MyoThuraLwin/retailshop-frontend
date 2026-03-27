@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { authAPI } from '../services/api';
 import './Register.css';
 
-const Register = ({ onSwitchToLogin }) => {
+const Register = ({ onSwitchToLogin, onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',

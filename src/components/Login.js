@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { authAPI } from '../services/api';
 import './Login.css';
 
-const Login = ({ onSwitchToRegister }) => {
+const Login = ({ onSwitchToRegister, onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -71,20 +71,30 @@ const Login = ({ onSwitchToRegister }) => {
         password: '',
       });
       
-      // You can redirect to dashboard or home page here
-      // Example: window.location.href = '/dashboard';
+      // Call parent login success handler
+      onLoginSuccess();
       
     } catch (error) {
       if (error.response) {
         // Server responded with error status
         const errorData = error.response.data;
+        
         if (typeof errorData === 'object') {
           const serverErrors = {};
           Object.keys(errorData).forEach(key => {
             if (Array.isArray(errorData[key])) {
-              serverErrors[key] = errorData[key][0];
+              if (key === 'non_field_errors') {
+                // Handle non-field errors as general error
+                serverErrors.general = errorData[key][0];
+              } else {
+                serverErrors[key] = errorData[key][0];
+              }
             } else {
-              serverErrors[key] = errorData[key];
+              if (key === 'non_field_errors') {
+                serverErrors.general = errorData[key];
+              } else {
+                serverErrors[key] = errorData[key];
+              }
             }
           });
           setErrors(serverErrors);
