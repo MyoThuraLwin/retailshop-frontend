@@ -3,11 +3,13 @@ import Register from './components/Register';
 import Login from './components/Login';
 import ProductList from './components/ProductList';
 import AddProduct from './components/AddProduct';
+import EditProduct from './components/EditProduct';
 import './App.css';
 
 function App() {
   const [currentView, setCurrentView] = useState('login');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [editingProductId, setEditingProductId] = useState(null);
 
   useEffect(() => {
     // Check if user is authenticated on app load
@@ -40,13 +42,25 @@ function App() {
     setCurrentView('add-product');
   };
 
-  const handleBackToProducts = () => {
-    setCurrentView('products');
-  };
-
   const handleProductAdded = (newProduct) => {
     // This could be used to refresh the product list
     setCurrentView('products');
+  };
+
+  const handleEditProduct = (productId) => {
+    setEditingProductId(productId);
+    setCurrentView('edit-product');
+  };
+
+  const handleBackToProducts = () => {
+    setCurrentView('products');
+    setEditingProductId(null);
+  };
+
+  const handleProductUpdated = (updatedProduct) => {
+    // This could be used to refresh the product list
+    setCurrentView('products');
+    setEditingProductId(null);
   };
 
   // If authenticated, show appropriate view
@@ -57,16 +71,24 @@ function App() {
           <ProductList 
             onLogout={handleLogout} 
             onAddProduct={handleAddProduct}
+            onEditProduct={handleEditProduct}
           />
         ) : currentView === 'add-product' ? (
           <AddProduct 
             onBackToList={handleBackToProducts}
             onProductAdded={handleProductAdded}
           />
+        ) : currentView === 'edit-product' ? (
+          <EditProduct 
+            productId={editingProductId}
+            onBackToList={handleBackToProducts}
+            onProductUpdated={handleProductUpdated}
+          />
         ) : (
           <ProductList 
             onLogout={handleLogout} 
             onAddProduct={handleAddProduct}
+            onEditProduct={handleEditProduct}
           />
         )}
       </div>
