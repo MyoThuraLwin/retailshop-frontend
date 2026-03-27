@@ -22,6 +22,29 @@
   font-weight: 600;
 }
 
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.add-product-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.add-product-button:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
 .logout-button {
   background-color: #dc3545;
   color: white;
@@ -179,6 +202,11 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+  
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
   }
   
   .table-container {

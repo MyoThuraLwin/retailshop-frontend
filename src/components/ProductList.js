@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { productAPI } from '../services/api';
 import './ProductList.css';
 
-const ProductList = ({ onLogout }) => {
+const ProductList = ({ onLogout, onAddProduct }) => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -17,8 +17,6 @@ const ProductList = ({ onLogout }) => {
       setIsLoading(true);
       setError('');
       const response = await productAPI.getAll();
-      console.log('API Response:', response);
-      console.log('Response Data:', response.data);
       
       // Handle different response structures
       let productsData = response.data;
@@ -133,9 +131,14 @@ const ProductList = ({ onLogout }) => {
     <div className="product-list-container">
       <div className="product-list-header">
         <h2>Product List</h2>
-        <button className="logout-button" onClick={handleLogout}>
-          Logout
-        </button>
+        <div className="header-actions">
+          <button className="add-product-button" onClick={onAddProduct}>
+            + Add Product
+          </button>
+          <button className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </div>
       
       {successMessage && (

@@ -58,11 +58,11 @@ const Login = ({ onSwitchToRegister, onLoginSuccess }) => {
       const response = await authAPI.login(formData);
       
       // Store tokens if they are returned
-      if (response.data.access) {
-        localStorage.setItem('access_token', response.data.access);
+      if (response.data.access_token) {
+        localStorage.setItem('access_token', response.data.access_token);
       }
-      if (response.data.refresh) {
-        localStorage.setItem('refresh_token', response.data.refresh);
+      if (response.data.refresh_token) {
+        localStorage.setItem('refresh_token', response.data.refresh_token);
       }
       
       setSuccessMessage('Login successful! Redirecting...');
