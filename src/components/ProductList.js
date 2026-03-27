@@ -55,19 +55,37 @@ const ProductList = ({ onLogout, onAddProduct, onEditProduct }) => {
   };
 
   const handleDelete = async (productId, productName) => {
-    if (window.confirm(`Are you sure you want to delete "${productName}"?`)) {
+    if (window.confirm(`Are you sure you want to delete "${productName}"? This action cannot be undone.`)) {
       try {
+        setIsLoading(true);
+        setError('');
+        
         await productAPI.delete(productId);
-        setSuccessMessage('Product deleted successfully!');
-        // Remove product from list
+        
+        setSuccessMessage(`Product "${productName}" deleted successfully!`);
+        
+        // Remove product from list immediately for better UX
         setProducts(products.filter(p => p.id !== productId));
+        
         // Clear success message after 3 seconds
         setTimeout(() => setSuccessMessage(''), 3000);
+        
       } catch (error) {
-        setError('Failed to delete product. Please try again.');
+        if (error.response?.status === 401) {
+          setError('Session expired. Please login again.');
+        } else if (error.response?.status === 404) {
+          setError('Product not found. It may have already been deleted.');
+        } else if (error.response?.status === 403) {
+          setError('You do not have permission to delete this product.');
+        } else {
+          setError('Failed to delete product. Please try again.');
+        }
         console.error('Error deleting product:', error);
+        
         // Clear error message after 3 seconds
         setTimeout(() => setError(''), 3000);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -190,8 +208,9 @@ const ProductList = ({ onLogout, onAddProduct, onEditProduct }) => {
                     <button 
                       className="action-button delete-button"
                       onClick={() => handleDelete(product.id, product.name)}
+                      disabled={isLoading}
                     >
-                      Delete
+                      {isLoading ? 'Deleting...' : 'Delete'}
                     </button>
                   </td>
                 </tr>
