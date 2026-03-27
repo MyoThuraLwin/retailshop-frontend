@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Register from './components/Register';
 import Login from './components/Login';
 import ProductList from './components/ProductList';
+import AddProduct from './components/AddProduct';
 import './App.css';
 
 function App() {
@@ -35,11 +36,39 @@ function App() {
     setCurrentView('login');
   };
 
-  // If authenticated, show product list
+  const handleAddProduct = () => {
+    setCurrentView('add-product');
+  };
+
+  const handleBackToProducts = () => {
+    setCurrentView('products');
+  };
+
+  const handleProductAdded = (newProduct) => {
+    // This could be used to refresh the product list
+    setCurrentView('products');
+  };
+
+  // If authenticated, show appropriate view
   if (isAuthenticated) {
     return (
       <div className="App">
-        <ProductList onLogout={handleLogout} />
+        {currentView === 'products' ? (
+          <ProductList 
+            onLogout={handleLogout} 
+            onAddProduct={handleAddProduct}
+          />
+        ) : currentView === 'add-product' ? (
+          <AddProduct 
+            onBackToList={handleBackToProducts}
+            onProductAdded={handleProductAdded}
+          />
+        ) : (
+          <ProductList 
+            onLogout={handleLogout} 
+            onAddProduct={handleAddProduct}
+          />
+        )}
       </div>
     );
   }
