@@ -1,0 +1,22 @@
+version: 2.1
+
+jobs:
+  build-frontend:
+    docker:
+      - image: cimg/base:stable
+
+    steps:
+      - checkout
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      - run:
+          name: Build frontend Docker image
+          command: |
+            docker build -t retailshop-react:ci .
+
+workflows:
+  frontend-workflow:
+    jobs:
+      - build-frontend
