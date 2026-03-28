@@ -98,7 +98,7 @@ const Register = ({ onSwitchToLogin, onLoginSuccess }) => {
     setSuccessMessage('');
     
     try {
-      const response = await authAPI.register(formData);
+      await authAPI.register(formData);
       
       setSuccessMessage('Registration successful! You can now log in.');
       setFormData({
