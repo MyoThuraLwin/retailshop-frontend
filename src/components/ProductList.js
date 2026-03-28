@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { productAPI } from '../services/api';
+import { productAPI, authAPI } from '../services/api';
 import './ProductList.css';
 
 const ProductList = ({ onLogout, onAddProduct, onEditProduct }) => {
@@ -108,7 +108,7 @@ const ProductList = ({ onLogout, onAddProduct, onEditProduct }) => {
         
         if (refreshToken) {
           // Call logout API with refresh token
-          await productAPI.logout(refreshToken);
+          await authAPI.logout(refreshToken);
         }
         
         // Clear tokens from localStorage
